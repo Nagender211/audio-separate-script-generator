@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dual Speaker Sync Studio</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="backdrop" aria-hidden="true">
+      <span class="orb orb-1"></span>
+      <span class="orb orb-2"></span>
+      <span class="orb orb-3"></span>
+      <span class="grain"></span>
+    </div>
+    <main class="container">
+      <header class="header">
+        <div>
+          <p class="eyebrow">Dual track studio</p>
+          <h1>Ramu and Riya synchronized dialogue studio</h1>
+          <p class="subtitle">
+            Each file includes the speaker voice plus silence so both tracks stay aligned.
+          </p>
+          <div class="tag-row">
+            <span class="tag">Two-speaker alignment</span>
+            <span class="tag">Upload & transcribe</span>
+            <span class="tag">Editable script</span>
+          </div>
+        </div>
+        <div class="meta">
+          <div>
+            <span class="label">Duration target</span>
+            <span id="durationDisplay">Loading audio metadata...</span>
+          </div>
+          <div>
+            <span class="label">Files</span>
+            <span>Ramu_Audio.wav, Riya_Audio.wav</span>
+          </div>
+        </div>
+      </header>
+
+      <section class="player-grid">
+        <div class="player-card">
+          <h2>Ramu</h2>
+          <audio id="ramuAudio" controls preload="metadata" src="speaker-audio/Ramu_Audio.wav"></audio>
+          <div class="download">
+            <a href="speaker-audio/Ramu_Audio.wav" download>Download Ramu_Audio.wav</a>
+          </div>
+        </div>
+        <div class="player-card">
+          <h2>Riya</h2>
+          <audio id="riyaAudio" controls preload="metadata" src="speaker-audio/Riya_Audio.wav"></audio>
+          <div class="download">
+            <a href="speaker-audio/Riya_Audio.wav" download>Download Riya_Audio.wav</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="controls">
+        <button id="playBoth">Play both</button>
+        <button id="pauseBoth">Pause both</button>
+        <button id="stopBoth">Stop</button>
+        <button id="syncBoth">Sync time</button>
+      </section>
+
+      <section class="transcribe" id="transcribeSection">
+        <div class="section-overlay" id="transcribeOverlay" aria-hidden="true">
+          <div class="overlay-card">
+            <div class="spinner"></div>
+            <p id="transcribeOverlayText">Transcribing audio...</p>
+            <div class="loading-bar"><span></span></div>
+          </div>
+        </div>
+        <div class="script-header">
+          <h3>Audio to Script (Ramu/Riya)</h3>
+          <div class="script-actions">
+            <input id="audioFile" type="file" accept="audio/*" />
+            <button id="transcribeAudio">Transcribe audio</button>
+            <button id="useTranscription">Use in editor</button>
+            <button id="copyTranscription">Copy text</button>
+            <span id="speakerMapDisplay" class="status-chip"></span>
+            <span id="transcribeStatus" class="status-chip" aria-live="polite"></span>
+          </div>
+        </div>
+        <p class="script-hint">
+          Upload up to 800 MB. Transcription uses two-speaker diarization if available.
+        </p>
+        <textarea id="transcriptBox" rows="10" readonly>Transcription will appear here.</textarea>
+      </section>
+
+      <section class="script" id="scriptSection">
+        <div class="section-overlay" id="generateOverlay" aria-hidden="true">
+          <div class="overlay-card">
+            <div class="spinner"></div>
+            <p id="generateOverlayText">Generating audio...</p>
+            <div class="loading-bar"><span></span></div>
+          </div>
+        </div>
+        <div class="script-header">
+          <h3>Dialogue script editor</h3>
+          <div class="script-actions">
+            <button id="generateAudio">Generate audio</button>
+            <button id="normalizeScript">Format script</button>
+            <button id="copyScript">Copy script</button>
+            <label class="field">
+              <span>Speed</span>
+              <select id="maxConcurrent">
+                <option value="1">Safe (1)</option>
+                <option value="2" selected>Fast (2)</option>
+                <option value="3">Turbo (3)</option>
+                <option value="4">Max (4)</option>
+              </select>
+            </label>
+            <span id="copyStatus" class="status-chip"></span>
+            <span id="generateStatus" class="status-chip" aria-live="polite"></span>
+          </div>
+        </div>
+        <p class="script-hint">
+          Paste any script format. We will detect two speakers and map them to Ramu/Riya.
+        </p>
+        <textarea id="scriptBox" rows="18">Loading script...</textarea>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

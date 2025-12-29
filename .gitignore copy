@@ -1,0 +1,7 @@
+# .gitignore (recommended)
+speaker-audio/tmp/
+speaker-audio/uploads/
+speaker-audio/*.wav
+speaker-audio/*.mp3
+speaker-audio/*.m4a
+__pycache__/
