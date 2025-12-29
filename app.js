@@ -1,5 +1,7 @@
 const ramuAudio = document.getElementById("ramuAudio");
 const riyaAudio = document.getElementById("riyaAudio");
+const ramuDownload = document.getElementById("ramuDownload");
+const riyaDownload = document.getElementById("riyaDownload");
 const durationDisplay = document.getElementById("durationDisplay");
 const scriptBox = document.getElementById("scriptBox");
 const generateAudio = document.getElementById("generateAudio");
@@ -363,12 +365,33 @@ function stopSyncLoop() {
   }
 }
 
-function refreshAudioSources() {
+function setDownloadLink(link, url) {
+  if (!link) {
+    return;
+  }
+  if (!url) {
+    link.removeAttribute("href");
+    link.setAttribute("aria-disabled", "true");
+    return;
+  }
+  link.href = url;
+  link.removeAttribute("aria-disabled");
+}
+
+function refreshAudioSources(basePath) {
+  if (!basePath) {
+    return;
+  }
   const cacheBust = `?t=${Date.now()}`;
-  ramuAudio.src = `speaker-audio/Ramu_Audio.wav${cacheBust}`;
-  riyaAudio.src = `speaker-audio/Riya_Audio.wav${cacheBust}`;
+  const ramuUrl = `${basePath}/Ramu_Audio.wav`;
+  const riyaUrl = `${basePath}/Riya_Audio.wav`;
+  ramuAudio.src = `${ramuUrl}${cacheBust}`;
+  riyaAudio.src = `${riyaUrl}${cacheBust}`;
   ramuAudio.load();
   riyaAudio.load();
+  setDownloadLink(ramuDownload, ramuUrl);
+  setDownloadLink(riyaDownload, riyaUrl);
+  durationDisplay.textContent = "Loading audio metadata...";
 }
 
 function getMaxConcurrent() {
@@ -497,15 +520,6 @@ riyaAudio.addEventListener("play", startSyncLoop);
 ramuAudio.addEventListener("pause", stopSyncLoop);
 riyaAudio.addEventListener("pause", stopSyncLoop);
 
-fetch("speaker-audio/dialogue.txt")
-  .then((response) => response.text())
-  .then((text) => {
-    scriptBox.value = text.trim();
-  })
-  .catch(() => {
-    scriptBox.value = "Dialogue script not found. Run generate_audio.py first.";
-  });
-
 generateAudio.addEventListener("click", async () => {
   const scriptText = scriptBox.value.trim();
   if (!scriptText) {
@@ -551,7 +565,7 @@ generateAudio.addEventListener("click", async () => {
       durationLabel = ` ${data.minutes} minutes.`;
     }
     generateStatus.textContent = `Generation complete.${durationLabel}`;
-    refreshAudioSources();
+    refreshAudioSources(data.output_dir);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Generation failed.";
     generateStatus.textContent = message;

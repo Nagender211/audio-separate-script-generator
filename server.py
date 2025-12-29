@@ -12,6 +12,7 @@ from urllib.parse import parse_qs, urlparse
 
 MAX_UPLOAD_BYTES = 800 * 1024 * 1024
 UPLOAD_DIR = Path("speaker-audio") / "uploads"
+RUNS_DIR = Path("speaker-audio") / "runs"
 ALLOWED_AUDIO_EXTS = {".wav", ".mp3", ".m4a", ".flac", ".aac", ".ogg", ".opus", ".webm"}
 
 
@@ -19,6 +20,22 @@ def sanitize_filename(name: str) -> str:
     base = Path(name).name
     base = re.sub(r"[^A-Za-z0-9_.-]+", "_", base)
     return base or "audio_upload.bin"
+
+
+def create_run_directory() -> tuple[str, Path]:
+    RUNS_DIR.mkdir(parents=True, exist_ok=True)
+    for _ in range(5):
+        run_id = f"{time.time_ns()}_{secrets.token_hex(4)}"
+        output_dir = RUNS_DIR / run_id
+        try:
+            output_dir.mkdir(parents=True, exist_ok=False)
+            return run_id, output_dir
+        except FileExistsError:
+            continue
+    run_id = f"{time.time_ns()}_{secrets.token_hex(8)}"
+    output_dir = RUNS_DIR / run_id
+    output_dir.mkdir(parents=True, exist_ok=True)
+    return run_id, output_dir
 
 
 class AudioRequestHandler(SimpleHTTPRequestHandler):
@@ -131,8 +148,7 @@ class AudioRequestHandler(SimpleHTTPRequestHandler):
 
         minutes = payload.get("minutes")
         max_concurrent = payload.get("maxConcurrent")
-        output_dir = Path("speaker-audio")
-        output_dir.mkdir(parents=True, exist_ok=True)
+        run_id, output_dir = create_run_directory()
         script_path = output_dir / "dialogue_input.txt"
         script_path.write_text(script_text, encoding="utf-8")
 
@@ -180,12 +196,15 @@ class AudioRequestHandler(SimpleHTTPRequestHandler):
             except json.JSONDecodeError:
                 minutes_value = None
 
+        public_dir = (RUNS_DIR / run_id).as_posix()
         self.send_json(
             200,
             {
                 "status": "ok",
                 "minutes": minutes_value,
                 "duration_seconds": duration_seconds,
+                "output_dir": public_dir,
+                "run_id": run_id,
             },
         )
 

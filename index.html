@@ -30,7 +30,7 @@
         <div class="meta">
           <div>
             <span class="label">Duration target</span>
-            <span id="durationDisplay">Loading audio metadata...</span>
+            <span id="durationDisplay">Generate audio to load metadata.</span>
           </div>
           <div>
             <span class="label">Files</span>
@@ -42,16 +42,16 @@
       <section class="player-grid">
         <div class="player-card">
           <h2>Ramu</h2>
-          <audio id="ramuAudio" controls preload="metadata" src="speaker-audio/Ramu_Audio.wav"></audio>
+          <audio id="ramuAudio" controls preload="metadata"></audio>
           <div class="download">
-            <a href="speaker-audio/Ramu_Audio.wav" download>Download Ramu_Audio.wav</a>
+            <a id="ramuDownload" download aria-disabled="true">Download Ramu_Audio.wav</a>
           </div>
         </div>
         <div class="player-card">
           <h2>Riya</h2>
-          <audio id="riyaAudio" controls preload="metadata" src="speaker-audio/Riya_Audio.wav"></audio>
+          <audio id="riyaAudio" controls preload="metadata"></audio>
           <div class="download">
-            <a href="speaker-audio/Riya_Audio.wav" download>Download Riya_Audio.wav</a>
+            <a id="riyaDownload" download aria-disabled="true">Download Riya_Audio.wav</a>
           </div>
         </div>
       </section>
@@ -118,7 +118,7 @@
         <p class="script-hint">
           Paste any script format. We will detect two speakers and map them to Ramu/Riya.
         </p>
-        <textarea id="scriptBox" rows="18">Loading script...</textarea>
+        <textarea id="scriptBox" rows="18">enjoy the saparrate audio generation</textarea>
       </section>
     </main>
 
