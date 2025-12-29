@@ -262,6 +262,12 @@ h1 {
   justify-content: space-between;
   margin-bottom: 12px;
 }
+@media screen and (max-width: 769px) {
+  .script-header{
+    display: flex;
+    flex-direction: column;
+  }
+}
 
 .script-actions {
   display: flex;
