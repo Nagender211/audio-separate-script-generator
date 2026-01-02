@@ -1,0 +1,18 @@
+{
+  "duration_seconds": 1.65,
+  "voices": {
+    "Ramu": "en-IN-PrabhatNeural",
+    "Riya": "en-IN-NeerjaNeural"
+  },
+  "rate": "-5%",
+  "turns_per_minute": 4,
+  "entries": [
+    {
+      "start_time": "00:00",
+      "speaker": "Ramu",
+      "text": "What is Lorem Ipsum",
+      "speech_seconds": 1.65,
+      "trimmed": false
+    }
+  ]
+}

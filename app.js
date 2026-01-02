@@ -1,5 +1,7 @@
+const fullAudio = document.getElementById("fullAudio");
 const ramuAudio = document.getElementById("ramuAudio");
 const riyaAudio = document.getElementById("riyaAudio");
+const fullDownload = document.getElementById("fullDownload");
 const ramuDownload = document.getElementById("ramuDownload");
 const riyaDownload = document.getElementById("riyaDownload");
 const durationDisplay = document.getElementById("durationDisplay");
@@ -328,13 +330,20 @@ function formatDuration(seconds) {
 }
 
 function updateDuration() {
-  if (Number.isFinite(ramuAudio.duration) && Number.isFinite(riyaAudio.duration)) {
-    const minDuration = Math.min(ramuAudio.duration, riyaAudio.duration);
-    const maxDuration = Math.max(ramuAudio.duration, riyaAudio.duration);
-    const label = `Ramu ${formatDuration(ramuAudio.duration)} | Riya ${formatDuration(
-      riyaAudio.duration
-    )} | Diff ${Math.abs(maxDuration - minDuration).toFixed(2)}s`;
-    durationDisplay.textContent = label;
+  const durations = [];
+  
+  if (Number.isFinite(fullAudio.duration)) {
+    durations.push(`Full ${formatDuration(fullAudio.duration)}`);
+  }
+  if (Number.isFinite(ramuAudio.duration)) {
+    durations.push(`Ramu ${formatDuration(ramuAudio.duration)}`);
+  }
+  if (Number.isFinite(riyaAudio.duration)) {
+    durations.push(`Riya ${formatDuration(riyaAudio.duration)}`);
+  }
+  
+  if (durations.length > 0) {
+    durationDisplay.textContent = durations.join(" | ");
   }
 }
 
@@ -383,12 +392,16 @@ function refreshAudioSources(basePath) {
     return;
   }
   const cacheBust = `?t=${Date.now()}`;
+  const fullUrl = `${basePath}/Full_Audio.wav`;
   const ramuUrl = `${basePath}/Ramu_Audio.wav`;
   const riyaUrl = `${basePath}/Riya_Audio.wav`;
+  fullAudio.src = `${fullUrl}${cacheBust}`;
   ramuAudio.src = `${ramuUrl}${cacheBust}`;
   riyaAudio.src = `${riyaUrl}${cacheBust}`;
+  fullAudio.load();
   ramuAudio.load();
   riyaAudio.load();
+  setDownloadLink(fullDownload, fullUrl);
   setDownloadLink(ramuDownload, ramuUrl);
   setDownloadLink(riyaDownload, riyaUrl);
   durationDisplay.textContent = "Loading audio metadata...";
@@ -514,6 +527,7 @@ syncBoth.addEventListener("click", () => {
 
 ramuAudio.addEventListener("loadedmetadata", updateDuration);
 riyaAudio.addEventListener("loadedmetadata", updateDuration);
+fullAudio.addEventListener("loadedmetadata", updateDuration);
 
 ramuAudio.addEventListener("play", startSyncLoop);
 riyaAudio.addEventListener("play", startSyncLoop);

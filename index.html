@@ -41,6 +41,13 @@
 
       <section class="player-grid">
         <div class="player-card">
+          <h2>Full Audio (Combined)</h2>
+          <audio id="fullAudio" controls preload="metadata"></audio>
+          <div class="download">
+            <a id="fullDownload" download aria-disabled="true">Download Full_Audio.wav</a>
+          </div>
+        </div>
+        <div class="player-card">
           <h2>Ramu</h2>
           <audio id="ramuAudio" controls preload="metadata"></audio>
           <div class="download">
@@ -116,9 +123,14 @@
           </div>
         </div>
         <p class="script-hint">
-          Paste any script format. We will detect two speakers and map them to Ramu/Riya.
+          <strong>How to use:</strong><br>
+          1. Type or paste your script here<br>
+          2. Click on "Format script" to organize the dialogue<br>
+          3. Choose the speed to generate the audio (Max 4x or Turbo 3x for better quality)<br>
+          4. Click on "Generate audio" (wait for a while - it will generate the full and separate voice split with no breaking or voice collapse)<br>
+          5. Click on "Download audio" to download and enjoy wherever you want to use it
         </p>
-        <textarea id="scriptBox" rows="18">enjoy the saparrate audio generation</textarea>
+        <textarea id="scriptBox" rows="18" placeholder="Type your script or paste the script here..."></textarea>
       </section>
     </main>
 

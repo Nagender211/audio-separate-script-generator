@@ -1,0 +1,39 @@
+{
+  "duration_seconds": 29.94,
+  "voices": {
+    "Ramu": "en-IN-PrabhatNeural",
+    "Riya": "en-IN-NeerjaNeural"
+  },
+  "rate": "-5%",
+  "turns_per_minute": 4,
+  "entries": [
+    {
+      "start_time": "00:00",
+      "speaker": "Ramu",
+      "text": "1. Type or paste your script here 2. Click on \"Format script\" to organize the dialogue 3.",
+      "speech_seconds": 8.06,
+      "trimmed": false
+    },
+    {
+      "start_time": "00:08",
+      "speaker": "Riya",
+      "text": "Choose the speed to generate the audio (Max 4x or Turbo 3x for better quality) 4.",
+      "speech_seconds": 6.62,
+      "trimmed": false
+    },
+    {
+      "start_time": "00:14",
+      "speaker": "Ramu",
+      "text": "Click on \"Generate audio\" (wait for a while - it will generate the full and separate voice split with no breaking or voice collapse) 5.",
+      "speech_seconds": 9.93,
+      "trimmed": false
+    },
+    {
+      "start_time": "00:24",
+      "speaker": "Riya",
+      "text": "Click on \"Download audio\" to download and enjoy wherever you want to use it",
+      "speech_seconds": 5.33,
+      "trimmed": false
+    }
+  ]
+}

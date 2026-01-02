@@ -1,0 +1,4 @@
+00:00 Ramu: 1. Type or paste your script here 2. Click on "Format script" to organize the dialogue 3.
+00:08 Riya: Choose the speed to generate the audio (Max 4x or Turbo 3x for better quality) 4.
+00:14 Ramu: Click on "Generate audio" (wait for a while - it will generate the full and separate voice split with no breaking or voice collapse) 5.
+00:24 Riya: Click on "Download audio" to download and enjoy wherever you want to use it

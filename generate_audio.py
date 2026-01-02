@@ -789,6 +789,56 @@ def resolve_minutes(args_minutes: int | None) -> int:
     return DEFAULT_MINUTES
 
 
+def combine_audio_files(ramu_path: Path, riya_path: Path, output_path: Path) -> None:
+    """Combine Ramu and Riya audio files into a single full audio file (mix them together)."""
+    try:
+        print(f"Combining audio files: {ramu_path} + {riya_path} -> {output_path}")
+        
+        # Read frames from both files
+        ramu_frames, ramu_count = read_wav_frames(ramu_path)
+        riya_frames, riya_count = read_wav_frames(riya_path)
+        
+        print(f"Ramu frames: {ramu_count}, Riya frames: {riya_count}")
+        
+        # Both should have the same frame count since they're generated simultaneously
+        max_frames = max(ramu_count, riya_count)
+        
+        # Convert byte frames to arrays for processing
+        ramu_array = array('h')
+        riya_array = array('h')
+        
+        ramu_array.frombytes(ramu_frames)
+        riya_array.frombytes(riya_frames)
+        
+        # Pad shorter array with silence if needed
+        if len(ramu_array) < max_frames * CHANNELS:
+            ramu_array.extend([0] * (max_frames * CHANNELS - len(ramu_array)))
+        if len(riya_array) < max_frames * CHANNELS:
+            riya_array.extend([0] * (max_frames * CHANNELS - len(riya_array)))
+        
+        # Mix the two audio arrays (add them together and divide by 2 to prevent clipping)
+        combined_array = array('h')
+        for i in range(len(ramu_array)):
+            # Simple mix: average the samples from both speakers
+            mixed_sample = int((int(ramu_array[i]) + int(riya_array[i])) / 2)
+            # Clamp to 16-bit signed range
+            mixed_sample = max(-32768, min(32767, mixed_sample))
+            combined_array.append(mixed_sample)
+        
+        # Write the combined audio to output file
+        with wave.open(str(output_path), "wb") as combined_wav:
+            combined_wav.setnchannels(CHANNELS)
+            combined_wav.setsampwidth(SAMPLE_WIDTH)
+            combined_wav.setframerate(FRAME_RATE)
+            combined_wav.writeframes(combined_array.tobytes())
+        
+        print(f"Successfully created combined audio: {output_path}")
+    except Exception as e:
+        print(f"Error combining audio files: {e}")
+        raise
+
+
+
 async def run_generation(args: argparse.Namespace) -> None:
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -1018,6 +1068,10 @@ async def run_generation(args: argparse.Namespace) -> None:
                     total_frames += remaining_frames
 
                 print(f"Minute {minute + 1}/{total_minutes} done.")
+
+    # Combine Ramu and Riya audio files into a full audio file
+    full_path = output_dir / "Full_Audio.wav"
+    combine_audio_files(ramu_path, riya_path, full_path)
 
     script_txt = output_dir / "dialogue.txt"
     with script_txt.open("w", encoding="utf-8") as handle:
